@@ -69,7 +69,7 @@ int countLedsOnTop = 25;
 // a int array that maps the number of lit leds in a half glass to an array of values indicating
 // whether or not to light a certain index from the middle of the hour glass. Remember we are in a snaking formation
 // these are the coordinates on the top of the hour glass
-int bottomPileLedsCoordinates[26][33] = {
+const int bottomPileLedsCoordinates[26][33] PROGMEM = {
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 0
   {
     0, 0, 0, 
@@ -251,7 +251,7 @@ int bottomPileLedsCoordinates[26][33] = {
 // a int array that maps the number of lit leds in a half glass to an array of values indicating
 // whether or not to light a certain index from the middle of the hour glass. Remember we are in a snaking formation
 // these are the coordinates when the glass is not tilted
-int topPileLedsCoordinates[26][33] = {
+const int topPileLedsCoordinates[26][33] PROGMEM = {
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 0
   {
     1, 0, 0, 
@@ -433,7 +433,7 @@ int topPileLedsCoordinates[26][33] = {
 // a int array that maps the number of lit leds in a half glass to an array of values indicating
 // whether or not to light a certain index from the middle of the hour glass. Remember we are in a snaking formation
 // these are the coordinates when the glass is tilted left
-int tiltLeftBottomLedsCoordinates[26][33] = {
+const int tiltLeftBottomLedsCoordinates[26][33] PROGMEM = {
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 0
   {
     0, 0, 0, 
@@ -615,7 +615,7 @@ int tiltLeftBottomLedsCoordinates[26][33] = {
 // a int array that maps the number of lit leds in a half glass to an array of values indicating
 // whether or not to light a certain index from the middle of the hour glass. Remember we are in a snaking formation
 // these are the coordinates when the glass is tilted right
-int tiltRightBottomLedsCoordinates[26][33] = {
+const int tiltRightBottomLedsCoordinates[26][33] PROGMEM = {
   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 0
   {
     0, 0, 0, 
@@ -996,7 +996,7 @@ void clearLeds() {
 }
 
 // ledsToLight - the coordinates of the leds to light (1 for on, 0 for off)
-void setLedsForBottomHalf(int ledsToLight[]) {
+void setLedsForBottomHalf(const int ledsToLight[]) {
   uint16_t ms = millis();  // rainbow pattern
   for(int i = 0; i < centerIndex; i++) {
     leds[bottomStartIndex + i] = ledsToLight[i] == 1 ? CHSV( ms / 41, 200, 255) : emptyColor;
@@ -1004,7 +1004,7 @@ void setLedsForBottomHalf(int ledsToLight[]) {
 }
 
 // ledsToLight - the coordinates of the leds to light (1 for on, 0 for off)
-void setLedsForTopHalf(int ledsToLight[]) {
+void setLedsForTopHalf(const int ledsToLight[]) {
   uint16_t ms = millis();  // rainbow pattern
   for(int i = 0; i < centerIndex; i++) {
     leds[topEndIndex - i] = ledsToLight[i] == 1 ? CHSV( ms / 53, 200, 255) : emptyColor;
