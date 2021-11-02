@@ -1,15 +1,17 @@
+
 /* TODO LIST*/
 /*
- * Make const and move to flash 
+ ** Make const and move to flash 
  * URLs
  * Reducing SRAM size: https://create.arduino.cc/projecthub/john-bradnam/reducing-your-memory-usage-26ca05
  * Pointer error: https://stackoverflow.com/questions/27447220/invalid-conversion-from-const-int-to-int
  * 
- * Change Accelerometer to ADXL
+ ** Change Accelerometer to ADXL
 */
 // Accelerometer
 #include <Wire.h>
-#include <Adafruit_MMA8451.h>
+#include <Adafruit_ADXL345_U.h>
+
 
 // y orientation
 #define DOWN         0
@@ -28,7 +30,7 @@ int prevTilt = NOT_TILTED;
 int threshold = 500;
 
 // accelerometer object
-Adafruit_MMA8451 mma = Adafruit_MMA8451();
+Adafruit_ADXL345_Unified adxl = Adafruit_ADXL345_Unified();
 
 //ws2812b
 #include <FastLED.h>
@@ -798,7 +800,7 @@ void setup(void) {
   Serial.begin(9600);
 
   // setup accelerometer
-  setupMma();
+  setupAdxl();
 
   // init fast led
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
@@ -806,32 +808,38 @@ void setup(void) {
 }
 
 void loop() {
-  mma.read();
-  dropSand();
+  int16_t x = adxl.getX();
+  int16_t y = adxl.getY();
+  dropSand(x,y);
 }
 
-void setupMma() {
-  if (!mma.begin()) {
+void setupAdxl() {
+  if (!adxl.begin()) {
     Serial.println("Couldn't start");
     while (1);
   }
-  Serial.println("MMA8451 found!");
-  mma.setRange(MMA8451_RANGE_2_G);
+  Serial.println("ADXL345 found!");
+  adxl.setRange(ADXL345_RANGE_2_G);
 }
 
-void dropSand(){
+void dropSand(int16_t x,int16_t y){
   int tilt = NOT_TILTED;
-  if(mma.x > threshold) {
+  if(x > threshold) {
     tilt = TILTED_RIGHT;
-  }else if(mma.x < -threshold) {
+  }else if(x < -threshold) {
     tilt = TILTED_LEFT;
   }
 
   int dir = FLAT;
-  if(mma.y > threshold) {
+  if(y > threshold) {
     dir = UP;
-  }else if(mma.y < -threshold) {
+    Serial.print(y); 
+    Serial.println(" | UP");
+  
+  }else if(y < -threshold) {
     dir = DOWN;
+    Serial.print(y); 
+    Serial.println(" | DOWN");
   }
   dropSandPileAnimation(dir, tilt);
   prevTilt = tilt;
